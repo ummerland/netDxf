@@ -39,6 +39,9 @@
     <None Update="sample.pdf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="samplest.dxf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="shape.shx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

@@ -3330,7 +3330,7 @@ namespace netDxf.IO
                 {
                     // AutoCAD allows duplicate tags in attribute definitions, but this library does not having duplicate tags is not recommended in any way,
                     // since there will be no way to know which is the definition associated to the insert attribute
-                    if (!block.AttributeDefinitions.ContainsTag(attDef.Tag))
+                    if (!block.AttributeDefinitions.ContainsTag(attDef.Tag) || true)
                     {
                         block.AttributeDefinitions.Add(attDef);
                     }

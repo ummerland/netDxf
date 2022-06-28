@@ -214,11 +214,21 @@ namespace netDxf.Collections
 
             if (this.OnBeforeAddItemEvent(item))
             {
-                throw new ArgumentException("The attribute definition cannot be added to the collection.", nameof(item));
+                //throw new ArgumentException("The attribute definition cannot be added to the collection.", nameof(item));
             }
 
-            this.innerDictionary.Add(item.Tag, item);
+            string newTag = item.Tag;
+            int i = 1;
+            while (this.innerDictionary.ContainsKey(newTag))
+            {
+                newTag = $"{item.Tag}_{i}";
+                i++;
+            }
+
+            this.innerDictionary.Add(newTag, item);
             this.OnAddItemEvent(item);
+
+
         }
 
         /// <summary>
@@ -354,12 +364,12 @@ namespace netDxf.Collections
 
         bool ICollection<KeyValuePair<string, AttributeDefinition>>.Contains(KeyValuePair<string, AttributeDefinition> item)
         {
-            return ((IDictionary<string, AttributeDefinition>) this.innerDictionary).Contains(item);
+            return ((IDictionary<string, AttributeDefinition>)this.innerDictionary).Contains(item);
         }
 
         void ICollection<KeyValuePair<string, AttributeDefinition>>.CopyTo(KeyValuePair<string, AttributeDefinition>[] array, int arrayIndex)
         {
-            ((IDictionary<string, AttributeDefinition>) this.innerDictionary).CopyTo(array, arrayIndex);
+            ((IDictionary<string, AttributeDefinition>)this.innerDictionary).CopyTo(array, arrayIndex);
         }
 
         IEnumerator IEnumerable.GetEnumerator()
