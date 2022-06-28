@@ -31,7 +31,7 @@ namespace TestDxfDocument
     {
         public static void Main()
         {
-            DxfDocument doc = Test(@"samplest.dxf"); 
+            DxfDocument doc = Test(@"sample.dxf"); 
 
             #region Samples for GTE classes
 
