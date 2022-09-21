@@ -103,7 +103,7 @@ namespace netDxf.Entities
 
                 double lambda = Lambda(alphaBeta, gammaDelta, point5);
                 if (double.IsNaN(lambda))
-                { 
+                {
                     // conic coefficients cannot be found, duplicate points
                     return null;
                 }
@@ -120,7 +120,7 @@ namespace netDxf.Entities
             }
 
             public static bool EllipseProperties(Vector2 point1, Vector2 point2, Vector2 point3, Vector2 point4, Vector2 point5, out Vector2 center, out double semiMajorAxis, out double semiMinorAxis, out double rotation)
-            {         
+            {
                 center = Vector2.NaN;
                 semiMajorAxis = double.NaN;
                 semiMinorAxis = double.NaN;
@@ -140,7 +140,7 @@ namespace netDxf.Entities
                 double f = coefficients[5];
 
                 double q = b * b - 4 * a * c;
-                           
+
                 if (q >= 0)
                 {
                     // not an ellipse
@@ -373,13 +373,17 @@ namespace netDxf.Entities
                 throw new ArgumentOutOfRangeException(nameof(minor), minor, "The minor axis value must be greater than zero.");
             }
 
-            if ( minor > major)
+            if (minor > major)
             {
-                throw new ArgumentException("The ellipse major axis must be greater than the minor axis.");
+                //throw new ArgumentException("The ellipse major axis must be greater than the minor axis.");
+                this.majorAxis = minor;
+                this.minorAxis = major;
             }
-
-            this.majorAxis = major;
-            this.minorAxis = minor;
+            else
+            {
+                this.majorAxis = major;
+                this.minorAxis = minor;
+            }
         }
 
         /// <summary>
@@ -443,7 +447,7 @@ namespace netDxf.Entities
                 }
                 steps = precision - 1;
             }
-           
+
             double delta = (end - start) / steps;
 
             for (int i = 0; i < precision; i++)
@@ -472,11 +476,11 @@ namespace netDxf.Entities
             Vector3 ocsCenter = MathHelper.Transform(this.center, this.Normal, CoordinateSystem.World, CoordinateSystem.Object);
             Polyline2D poly = new Polyline2D
             {
-                Layer = (Layer) this.Layer.Clone(),
-                Linetype = (Linetype) this.Linetype.Clone(),
-                Color = (AciColor) this.Color.Clone(),
+                Layer = (Layer)this.Layer.Clone(),
+                Linetype = (Linetype)this.Linetype.Clone(),
+                Color = (AciColor)this.Color.Clone(),
                 Lineweight = this.Lineweight,
-                Transparency = (Transparency) this.Transparency.Clone(),
+                Transparency = (Transparency)this.Transparency.Clone(),
                 LinetypeScale = this.LinetypeScale,
                 Normal = this.Normal,
                 Elevation = ocsCenter.Z,
@@ -515,13 +519,13 @@ namespace netDxf.Entities
             Vector2 p2 = new Vector2(semiMajorAxis, semiMinorAxis);
             Vector2 p3 = new Vector2(-semiMajorAxis, -semiMinorAxis);
             Vector2 p4 = new Vector2(semiMajorAxis, -semiMinorAxis);
-            List<Vector2> ocsPoints = MathHelper.Transform(new[] {p1, p2, p3, p4}, this.Rotation * MathHelper.DegToRad, CoordinateSystem.Object, CoordinateSystem.World);
+            List<Vector2> ocsPoints = MathHelper.Transform(new[] { p1, p2, p3, p4 }, this.Rotation * MathHelper.DegToRad, CoordinateSystem.Object, CoordinateSystem.World);
 
             Vector3 p1Prime = new Vector3(ocsPoints[0].X, ocsPoints[0].Y, 0.0);
             Vector3 p2Prime = new Vector3(ocsPoints[1].X, ocsPoints[1].Y, 0.0);
             Vector3 p3Prime = new Vector3(ocsPoints[2].X, ocsPoints[2].Y, 0.0);
             Vector3 p4Prime = new Vector3(ocsPoints[3].X, ocsPoints[3].Y, 0.0);
-            List<Vector3> wcsPoints = MathHelper.Transform(new[] {p1Prime, p2Prime, p3Prime, p4Prime}, this.Normal, CoordinateSystem.Object, CoordinateSystem.World);
+            List<Vector3> wcsPoints = MathHelper.Transform(new[] { p1Prime, p2Prime, p3Prime, p4Prime }, this.Normal, CoordinateSystem.Object, CoordinateSystem.World);
             for (int i = 0; i < wcsPoints.Count; i++)
             {
                 wcsPoints[i] += this.Center;
@@ -537,7 +541,7 @@ namespace netDxf.Entities
             }
 
             List<Vector3> rectPoints = MathHelper.Transform(wcsPoints, newNormal, CoordinateSystem.World, CoordinateSystem.Object);
-            
+
             // corners of the transformed rectangle that circumscribe the new ellipse        
             Vector2 pointA = new Vector2(rectPoints[0].X, rectPoints[0].Y);
             Vector2 pointB = new Vector2(rectPoints[1].X, rectPoints[1].Y);
@@ -564,12 +568,12 @@ namespace netDxf.Entities
 
             // find the fifth point in the ellipse
             Vector2 pointZ = MathHelper.FindIntersection(pointM, pointX - pointM, pointN, pointY - pointN);
-            if(Vector2.IsNaN(pointZ))
+            if (Vector2.IsNaN(pointZ))
             {
                 Debug.Assert(false, "The transformation cannot be applied.");
                 return;
             }
-            
+
             Vector3 oldNormal = this.Normal;
             double oldRotation = this.Rotation * MathHelper.DegToRad;
 
@@ -637,11 +641,11 @@ namespace netDxf.Entities
             Ellipse entity = new Ellipse
             {
                 //EntityObject properties
-                Layer = (Layer) this.Layer.Clone(),
-                Linetype = (Linetype) this.Linetype.Clone(),
-                Color = (AciColor) this.Color.Clone(),
+                Layer = (Layer)this.Layer.Clone(),
+                Linetype = (Linetype)this.Linetype.Clone(),
+                Color = (AciColor)this.Color.Clone(),
                 Lineweight = this.Lineweight,
-                Transparency = (Transparency) this.Transparency.Clone(),
+                Transparency = (Transparency)this.Transparency.Clone(),
                 LinetypeScale = this.LinetypeScale,
                 Normal = this.Normal,
                 IsVisible = this.IsVisible,
@@ -657,7 +661,7 @@ namespace netDxf.Entities
 
             foreach (XData data in this.XData.Values)
             {
-                entity.XData.Add((XData) data.Clone());
+                entity.XData.Add((XData)data.Clone());
             }
 
             return entity;
