@@ -2410,6 +2410,7 @@ namespace netDxf.IO
                 {
                     case 2:
                         name = this.DecodeEncodedNonAsciiCharacters(this.chunk.ReadString());
+                        name = name.Replace("|", " ");
                         this.chunk.Next();
                         break;
                     case 70:
